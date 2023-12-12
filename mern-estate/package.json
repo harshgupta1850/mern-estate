@@ -1,0 +1,26 @@
+{
+  "name": "mern-estate",
+  "version": "1.0.0",
+  "description": "Real Estate Using mern and tailwind",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+   "dev": "nodemon api/index.js",
+   "start": "start api/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harshgupta1850/mern-estate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harshgupta1850/mern-estate/issues"
+  },
+  "homepage": "https://github.com/harshgupta1850/mern-estate#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.2"
+  }
+}
