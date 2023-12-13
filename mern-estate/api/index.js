@@ -1,7 +1,8 @@
 import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
-import userRoutes from "./routes/user.routes.js"
+import userRouter from "./routes/user.route.js"
+import authRouter from "./routes/auth.route.js"
 
 dotenv.config()
 
@@ -14,8 +15,11 @@ mongoose
 
 const app = express()
 
-app.use('/api/user', userRoutes)
+app.use(express.json())
+app.use('/api/user', userRouter)
+app.use('/api/auth', authRouter)
 
 app.listen(1000, () => {
   console.log("server is running")
 })
+
