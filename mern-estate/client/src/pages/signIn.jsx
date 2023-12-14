@@ -1,38 +1,46 @@
 import React, { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import {
+    signInFailure,
+    signInStart,
+    signInSuccess,
+} from "../redux/user/userSlice";
 
 function Signin() {
-    const navigate = useNavigate()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({});
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const { error, loading, currentUser } = useSelector((state) => state.user);
+    console.log(currentUser);
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.id]: e.target.value,
         });
     };
-
     const handleSumbit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        setError(false);
-        const res = await fetch("/api/auth/signin", {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
-        const data = await res.json();
-        if (data.success === false) {
-            setLoading(false);
-            setError(data.message);
-            return;
+        try {
+            dispatch(signInStart());
+            const res = await fetch("/api/auth/signin", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+            const data = await res.json();
+            if (data.success === false) {
+                dispatch(signInFailure(data.message));
+                return;
+            }
+            dispatch(signInSuccess(data));
+            navigate("/");
+            console.log(data);
+        } catch (error) {
+            dispatch(signInFailure(error.message));
         }
-        setLoading(false);
-        navigate('/')
-        console.log(data);
     };
 
     console.log(formData);
