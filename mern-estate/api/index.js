@@ -19,11 +19,12 @@ app.use(express.json())
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
 
-app.listen(1000, () => {
+app.listen(3000, () => {
   console.log("server is running")
 })
 
 app.use((error, req, res, next) => {
+  console.log(error)
   const statusCode = error.statusCode || 500
   const message = error.message || "Internal server error"
   return res.status(statusCode).json({
