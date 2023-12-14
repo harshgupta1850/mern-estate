@@ -12,7 +12,7 @@ function Signin() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({});
     const { error, loading, currentUser } = useSelector((state) => state.user);
-    console.log(currentUser);
+    console.log(currentUser, "current user from signin page");
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -43,7 +43,7 @@ function Signin() {
         }
     };
 
-    console.log(formData);
+    console.log(formData, "form data from sigin in page");
 
     return (
         <div className="p-3 max-w-lg mx-auto">
