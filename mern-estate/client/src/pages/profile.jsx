@@ -65,7 +65,7 @@ function Profile() {
             const res = await fetch(`/api/user/update/${currentUser?._id}`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "applcation/json",
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(formData),
             });
