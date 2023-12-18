@@ -115,8 +115,10 @@ function Profile() {
             dispatch(signOutUserFailure(error.message));
         }
     };
+    const [nothingToShow, setNothingToShow] = useState(false);
 
     const handleShowListing = async () => {
+        setNothingToShow(true);
         try {
             setShowListingError(false);
             const res = await fetch(`/api/user/listings/${currentUser._id}`);
@@ -127,6 +129,23 @@ function Profile() {
             setUserListings(data);
         } catch (error) {
             setShowListingError(true);
+        }
+    };
+
+    const handleDeleteListing = async (id) => {
+        try {
+            const res = await fetch(`/api/listing/delete/${id}`, {
+                method: "DELETE",
+            });
+            const data = await res.json();
+            if (data.success === false) {
+                console.log(data.message);
+                return;
+            }
+            console.log(data);
+            setUserListings((prev) => prev.filter((list) => list._id !== id));
+        } catch (error) {
+            console.log(error.message);
         }
     };
 
@@ -212,7 +231,7 @@ function Profile() {
                 {updateSuccess ? "account update successfully" : ""}
             </p>
             <button
-                className="w-full text-green-700"
+                className="w-full text-green-700 pt-6"
                 onClick={handleShowListing}
             >
                 {" "}
@@ -248,7 +267,12 @@ function Profile() {
                                     </Link>
                                 </div>
                                 <div className="flex flex-col items-center">
-                                    <button className="text-red-700 uppercase">
+                                    <button
+                                        className="text-red-700 uppercase"
+                                        onClick={() =>
+                                            handleDeleteListing(list?._id)
+                                        }
+                                    >
                                         Delete
                                     </button>
                                     <button className="text-green-700 uppercase">
@@ -259,6 +283,11 @@ function Profile() {
                         );
                     })}
                 </div>
+            )}
+            {userListings.length < 1 && nothingToShow && (
+                <p className="text-slate-700 m-3 text-center">
+                    Nothing to show here
+                </p>
             )}
         </div>
     );
