@@ -30,6 +30,8 @@ function Profile() {
     const [fileUploadError, setFileUploadError] = useState(false);
     const [formData, setFormData] = useState({});
     const [updateSuccess, setUpadteSuccess] = useState(false);
+    const [showListingError, setShowListingError] = useState(false);
+    const [userListings, setUserListings] = useState([]);
     //firebase storage rule
     // allow read
     //   allow write: if
@@ -114,6 +116,20 @@ function Profile() {
         }
     };
 
+    const handleShowListing = async () => {
+        try {
+            setShowListingError(false);
+            const res = await fetch(`/api/user/listings/${currentUser._id}`);
+            const data = await res.json();
+            if (data.success === false) {
+                return setShowListingError(true);
+            }
+            setUserListings(data);
+        } catch (error) {
+            setShowListingError(true);
+        }
+    };
+
     return (
         <div className="p-3 max-w-lg mx-auto">
             <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -195,6 +211,55 @@ function Profile() {
             <p className="text-green-700">
                 {updateSuccess ? "account update successfully" : ""}
             </p>
+            <button
+                className="w-full text-green-700"
+                onClick={handleShowListing}
+            >
+                {" "}
+                Show Listings
+            </button>
+            <p className="mt-5 text-red-700">
+                {showListingError ? "Error Showing Listing" : ""}
+            </p>
+            {userListings.length > 0 && (
+                <div className="flex flex-col gap-4">
+                    <p className="text-2xl text-center font-extrabold my-7">
+                        Your Listing
+                    </p>
+                    {userListings?.map((list) => {
+                        return (
+                            <div
+                                className="flex border rounde-lg items-center justify-between p-3 gap-4"
+                                id={list._id}
+                            >
+                                <div className="flex">
+                                    <Link to={`/listing/${list._id}`}>
+                                        <img
+                                            src={list.imageUrls[0]}
+                                            alt="listing image"
+                                            className="h-16 w-16 object-contain"
+                                        />
+                                    </Link>
+                                    <Link
+                                        to={`/listing/${list._id}`}
+                                        lassName="text-slate-700 font-semibold  hover:underline truncate flex-1"
+                                    >
+                                        <p>{list?.name}</p>
+                                    </Link>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <button className="text-red-700 uppercase">
+                                        Delete
+                                    </button>
+                                    <button className="text-green-700 uppercase">
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }
