@@ -16,13 +16,29 @@ export const deleteListing = async (req, res, next) => {
     next(errorHandler(401, "No listing found"))
   }
   if (req.user.id !== listing.userRef) {
-    next(errorHandler(401, "you can delete your own listing"))
+    next(errorHandler(404, "you can delete your own listing"))
   }
-
   try {
     await Listing.findByIdAndDelete(req.params.id)
     res.status(200).json("listing successfully deleted ")
   } catch (error) {
     next(error)
+  }
+}
+
+export const updateListing = async (req, res, next) => {
+  const listing = await Listing.findById(req.params.id)
+  if (!listing) {
+    return next(errorHandler(401, "Listing Not found"))
+  }
+  if (req.user.id !== listing.userRef) {
+    console.log(listing.userRef, "listing.userRef", req.user.id)
+    return next(errorHandler(404, "You can your own listing"))
+  }
+  try {
+    const updatedListing = await Listing.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    res.status(200).json(updatedListing)
+  } catch (error) {
+    return next(error)
   }
 }
