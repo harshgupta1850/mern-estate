@@ -156,7 +156,6 @@ function CreateListing() {
                 setError(data.message);
             }
             setLoading(false);
-            console.log(data);
             naivate(`/listing/${data._id}`);
         } catch (error) {
             setError(error.message);

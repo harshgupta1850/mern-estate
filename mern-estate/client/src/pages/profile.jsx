@@ -249,7 +249,7 @@ function Profile() {
                         return (
                             <div
                                 className="flex border rounde-lg items-center justify-between p-3 gap-4"
-                                id={list._id}
+                                key={list._id}
                             >
                                 <div className="flex">
                                     <Link to={`/listing/${list._id}`}>
@@ -261,7 +261,7 @@ function Profile() {
                                     </Link>
                                     <Link
                                         to={`/listing/${list._id}`}
-                                        lassName="text-slate-700 font-semibold  hover:underline truncate flex-1"
+                                        className="text-slate-700 font-semibold  hover:underline truncate flex-1 p-3"
                                     >
                                         <p>{list?.name}</p>
                                     </Link>
