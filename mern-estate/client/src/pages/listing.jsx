@@ -12,15 +12,18 @@ import {
     FaParking,
     FaChair,
 } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import Contact from "../components/contact";
 
 function Listing() {
     const params = useParams();
+    const currentUser = useSelector((state) => state.user.currentUser);
     SwiperCore.use([Navigation]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [listingDetails, setListingDetails] = useState({});
     const [copyText, setCopyText] = useState(false);
-
+    const [contact, setContact] = useState(true);
     useEffect(() => {
         const fetchListDetails = async () => {
             try {
@@ -39,7 +42,6 @@ function Listing() {
         };
         fetchListDetails();
     }, [params?.listingId]);
-    console.log(listingDetails, "listingDetails");
 
     const renderCarasouel = () => (
         <Swiper navigation>
@@ -103,6 +105,22 @@ function Listing() {
         </ul>
     );
 
+    const handleContactLandord = () => setContact(false);
+    const renderContactLandlord = () => {
+        return (
+            currentUser &&
+            listingDetails?.userRef !== currentUser?._id &&
+            contact && (
+                <button
+                    className="uppercase hover:opacity-95 bg-slate-700 text-white p-3 rounded-lg w-100"
+                    onClick={handleContactLandord}
+                >
+                    Contact landord
+                </button>
+            )
+        );
+    };
+
     return (
         <main>
             {loading && (
@@ -150,6 +168,8 @@ function Listing() {
                     {listingDetails.description}
                 </p>
                 {renderAminites()}
+                {renderContactLandlord()}
+                {!contact && <Contact listing={listingDetails} />}
             </div>
         </main>
     );
