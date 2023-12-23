@@ -28,7 +28,7 @@ function App() {
                         element={<UpdateListing />}
                     />
                 </Route>
-                <Route path="/search/:searchTerm" element={<Search />} />
+                <Route path="/search" element={<Search />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/listing/:listingId" element={<Listing />} />
