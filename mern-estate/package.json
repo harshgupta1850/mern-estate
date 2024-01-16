@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon api/index.js",
+    
     "start": "start api/index.js"
   },
   "repository": {
